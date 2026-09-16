@@ -26,11 +26,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
         obscureText: passwordEnabled,
         validator: widget.validator,
         decoration: InputDecoration(
           labelText: widget.label,
-
+          contentPadding: EdgeInsets.all(2),
           labelStyle:
               //  Theme.of(context).textTheme.labelMedium!.copyWith(
               //   color: Theme.of(context).hoverColor,

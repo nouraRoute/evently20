@@ -24,11 +24,21 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.png
   AssetGenImage get google => const AssetGenImage('assets/icons/google.png');
 
+  /// File path: assets/icons/name_icon.svg
+  String get nameIcon => 'assets/icons/name_icon.svg';
+
   /// File path: assets/icons/password_icon.svg
   String get passwordIcon => 'assets/icons/password_icon.svg';
 
   /// List of all assets
-  List<dynamic> get values => [eg, lr, emailIcon, google, passwordIcon];
+  List<dynamic> get values => [
+    eg,
+    lr,
+    emailIcon,
+    google,
+    nameIcon,
+    passwordIcon,
+  ];
 }
 
 class $AssetsImagesGen {
