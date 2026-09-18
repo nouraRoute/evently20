@@ -10,10 +10,12 @@ class CustomTextFormField extends StatefulWidget {
     this.isPassword = false,
     required this.prefixIcon,
     this.validator,
+    this.controller,
   });
   final String? label;
   final String prefixIcon;
   final bool isPassword;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -26,9 +28,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        controller: widget.controller,
         onTapOutside: (event) {
           FocusScope.of(context).unfocus();
         },
+        style: Theme.of(context).textTheme.labelMedium,
         obscureText: passwordEnabled,
         validator: widget.validator,
         decoration: InputDecoration(

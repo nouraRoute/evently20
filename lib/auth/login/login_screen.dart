@@ -2,6 +2,8 @@ import 'package:evently/auth/register/register_screen.dart';
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/widgets/custom_text_form_field.dart';
 import 'package:evently/gen/assets.gen.dart';
+import 'package:evently/models/user_model.dart';
+import 'package:evently/services/firebase_auth_service.dart';
 import 'package:evently/theme/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Image.asset(Assets.images.logo.path, width: 136, height: 186),
                   CustomTextFormField(
+                    controller: emailController,
                     label: "Email", //TODO:localization
                     prefixIcon: Assets.icons.emailIcon,
                     validator: (p0) {
@@ -39,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   CustomTextFormField(
+                    controller: passwordController,
                     label: "Password", //TODO:localization
                     prefixIcon: Assets.icons.passwordIcon,
                     isPassword: true,
@@ -71,17 +77,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 56,
                     child: FilledButton(
-                      onPressed: () {
+                      onPressed: () async {
                         bool isValid = _formState.currentState!.validate();
                         if (isValid) {
-                          //
+                          UserModel user = UserModel(
+                            email: emailController.text.trim(),
+                            password: passwordController.text,
+                          );
+                          await FirebaseAuthService.login(user);
                         }
                       },
-                      child: Text("Login"),
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.mainColors,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
+                      child: Text("Login"),
                     ),
                   ),
                   //Don’t Have Account ? Create Account
