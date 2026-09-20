@@ -1,30 +1,33 @@
-import 'package:evently/auth/register/register_screen.dart';
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/widgets/custom_text_form_field.dart';
 import 'package:evently/gen/assets.gen.dart';
 import 'package:evently/models/user_model.dart';
 import 'package:evently/services/firebase_auth_service.dart';
 import 'package:evently/theme/app_colors.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-  static const String routeName = "/loginScreen";
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+  static const String routeName = "/registerScreen";
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+      appBar: AppBar(title: Text("Register")), //TODO:localization
+      body: SingleChildScrollView(
+        child: SafeArea(
           child: Form(
             key: _formState,
             child: Padding(
@@ -33,6 +36,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(Assets.images.logo.path, width: 136, height: 186),
+                  CustomTextFormField(
+                    controller: nameController,
+                    label: "Name", //TODO:localization
+                    prefixIcon: Assets.icons.nameIcon,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return "name is required!!"; //TODO:localization
+                      }
+                    },
+                  ),
                   CustomTextFormField(
                     controller: emailController,
                     label: "Email", //TODO:localization
@@ -53,6 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         return "password is required!!"; //TODO:localization
                       } else if (p0.length < 4) {
                         return "password must be atleast 6 characters";
+                      }
+                    },
+                  ),
+                  CustomTextFormField(
+                    controller: rePasswordController,
+                    label: "Re Password", //TODO:localization
+                    prefixIcon: Assets.icons.passwordIcon,
+                    isPassword: true,
+                    validator: (p0) {
+                      if (p0 != passwordController.text) {
+                        return "password doesnot match";
                       }
                     },
                   ),
@@ -77,30 +101,66 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 56,
                     child: FilledButton(
-                      onPressed: () async {
-                        bool isValid = _formState.currentState!.validate();
-                        if (isValid) {
-                          UserModel user = UserModel(
-                            email: emailController.text.trim(),
-                            password: passwordController.text,
-                          );
-                          await FirebaseAuthService.login(user);
-                        }
-                      },
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              bool isValid = _formState.currentState!.validate();
+                              if (isValid) {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                UserModel user = UserModel(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text,
+                                  name: nameController.text,
+                                );
+                                try {
+                                  await FirebaseAuthService.register(user);
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "success,start login!",
+                                          style: AppTextStyles.styleS16W600(color: Colors.white),
+                                        ),
+                                        backgroundColor: AppColors.mainColors.withValues(alpha: .6),
+                                      ),
+                                    );
+                                    Navigator.of(context).pop();
+                                  }
+                                } on String catch (errorMessage) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          errorMessage,
+                                          style: AppTextStyles.styleS16W600(color: Colors.white),
+                                        ),
+                                        backgroundColor: AppColors.errorColor,
+                                      ),
+                                    );
+                                  }
+                                }
+                                //
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            },
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.mainColors,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      child: Text("Login"),
+                      child: isLoading ? CircularProgressIndicator() : Text("Create account"),
                     ),
                   ),
                   //Don’t Have Account ? Create Account
                   RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(text: "Don’t Have Account ? "),
+                        TextSpan(text: "Already Have Account ? "),
                         TextSpan(
-                          text: "Create Account",
+                          text: "Login",
                           style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             fontSize: 16,
                             color: AppColors.mainColors,
@@ -108,10 +168,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             decorationColor: AppColors.mainColors,
                             fontStyle: FontStyle.italic,
                           ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.of(context).pushNamed(RegisterScreen.routeName);
-                            },
                           //TODO:ontap
                         ),
                       ],
@@ -119,33 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24.0),
-                    child: Row(
-                      spacing: 16,
-                      children: [
-                        Expanded(child: Divider(color: AppColors.mainColors)),
-                        Text("OR", style: AppTextStyles.styleS16W500(color: AppColors.mainColors)),
-                        Expanded(child: Divider(color: AppColors.mainColors)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 58,
-                    child: OutlinedButton.icon(
-                      icon: Image.asset(Assets.icons.google.path, width: 25, height: 25),
-                      onPressed: () {},
-                      label: Text(
-                        "Login With Google",
-                        style: AppTextStyles.styleS20W500(color: AppColors.mainColors),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: AppColors.mainColors),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 24),
                   Switch(
                     value: false,
@@ -166,8 +195,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  //  void onRegister(){
-
-  //   }
 }
