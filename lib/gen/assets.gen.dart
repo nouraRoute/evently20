@@ -47,8 +47,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/Logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/Logo.png');
 
+  /// File path: assets/images/birthday.png
+  AssetGenImage get birthday =>
+      const AssetGenImage('assets/images/birthday.png');
+
+  /// File path: assets/images/book_club.png
+  AssetGenImage get bookClub =>
+      const AssetGenImage('assets/images/book_club.png');
+
+  /// File path: assets/images/gamming.png
+  AssetGenImage get gamming => const AssetGenImage('assets/images/gamming.png');
+
+  /// File path: assets/images/sports.png
+  AssetGenImage get sports => const AssetGenImage('assets/images/sports.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [logo];
+  List<AssetGenImage> get values => [logo, birthday, bookClub, gamming, sports];
 }
 
 class Assets {

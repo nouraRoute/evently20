@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     hintColor: AppColors.lightSecTextColor,
+    cardColor: AppColors.mainColors,
     hoverColor: AppColors.lightSecTextColor,
+    shadowColor: AppColors.lightBgColor,
     scaffoldBackgroundColor: AppColors.lightBgColor,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.lightBgColor,
@@ -18,6 +20,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.mainColors,
       brightness: Brightness.light,
+      primary: AppColors.mainColors,
     ),
     textTheme: TextTheme(
       displayLarge: AppTextStyles.styleS22W700(),
@@ -42,6 +45,9 @@ class AppTheme {
     ),
   );
   static ThemeData darkTheme = ThemeData(
+    cardColor: AppColors.darkBgColor,
+    shadowColor: AppColors.mainColors,
+
     hintColor: AppColors.mainColors,
     hoverColor: AppColors.darkTextColor,
 
@@ -54,7 +60,11 @@ class AppTheme {
       centerTitle: true,
       iconTheme: IconThemeData(color: AppColors.mainColors),
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.mainColors, brightness: Brightness.dark),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.mainColors,
+      primary: AppColors.mainColors,
+      brightness: Brightness.dark,
+    ),
 
     textTheme: TextTheme(
       displayLarge: AppTextStyles.styleS22W700(color: AppColors.darkTextColor),
