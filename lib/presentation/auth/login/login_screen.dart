@@ -1,3 +1,4 @@
+import 'package:evently/common/widgets/custom_main_button.dart';
 import 'package:evently/presentation/auth/register/register_screen.dart';
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/widgets/custom_text_form_field.dart';
@@ -78,66 +79,56 @@ class _LoginScreenState extends State<LoginScreen> {
                     margin: EdgeInsets.symmetric(vertical: 24),
                     width: double.infinity,
                     height: 56,
-                    child: FilledButton(
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              bool isValid = _formState.currentState!.validate();
-                              if (isValid) {
-                                UserModel user = UserModel(
-                                  email: emailController.text.trim(),
-                                  password: passwordController.text,
-                                );
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                try {
-                                  UserModel? userData = await FirebaseAuthService.login(user);
-
-                                  if (userData != null) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "success,you are logged in!",
-                                            style: AppTextStyles.styleS16W600(color: Colors.white),
-                                          ),
-                                          backgroundColor: AppColors.mainColors.withValues(
-                                            alpha: .6,
-                                          ),
-                                        ),
-                                      );
-                                      Navigator.of(
-                                        context,
-                                      ).pushReplacementNamed(HomeScreen.routeName);
-                                    }
-                                  }
-                                } on String catch (errorMessage) {
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          errorMessage,
-                                          style: AppTextStyles.styleS16W600(color: Colors.white),
-                                        ),
-                                        backgroundColor: AppColors.errorColor,
-                                      ),
-                                    );
-                                  }
-                                }
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              }
-                            },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.mainColors,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      ),
-                      child: isLoading ? CircularProgressIndicator() : Text("Login"),
-                    ),
                   ),
-                  //Don’t Have Account ? Create Account
+                  CustomMainButton(
+                    isLoading: isLoading,
+                    label: "login",
+                    onPressed: () async {
+                      bool isValid = _formState.currentState!.validate();
+                      if (isValid) {
+                        UserModel user = UserModel(
+                          email: emailController.text.trim(),
+                          password: passwordController.text,
+                        );
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          UserModel? userData = await FirebaseAuthService.login(user);
+
+                          if (userData != null) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "success,you are logged in!",
+                                    style: AppTextStyles.styleS16W600(color: Colors.white),
+                                  ),
+                                  backgroundColor: AppColors.mainColors.withValues(alpha: .6),
+                                ),
+                              );
+                              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+                            }
+                          }
+                        } on String catch (errorMessage) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  errorMessage,
+                                  style: AppTextStyles.styleS16W600(color: Colors.white),
+                                ),
+                                backgroundColor: AppColors.errorColor,
+                              ),
+                            );
+                          }
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
+                  ), //Don’t Have Account ? Create Account
                   RichText(
                     text: TextSpan(
                       children: [

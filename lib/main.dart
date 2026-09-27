@@ -2,6 +2,7 @@ import 'package:evently/presentation/auth/login/login_screen.dart';
 import 'package:evently/presentation/auth/register/register_screen.dart';
 import 'package:evently/firebase_options.dart';
 import 'package:evently/presentation/home/home_screen.dart';
+import 'package:evently/presentation/new_event/new_event_screen.dart';
 import 'package:evently/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (_) => LoginScreen(),
         RegisterScreen.routeName: (_) => RegisterScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
+        NewEventScreen.routeName: (_) => NewEventScreen(),
       },
       initialRoute: isLoggedIn() ? HomeScreen.routeName : LoginScreen.routeName,
     );

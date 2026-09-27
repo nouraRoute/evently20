@@ -10,17 +10,19 @@ class CategoryCard extends StatelessWidget {
     required this.categoriesEnum,
     this.isAllCategories = false,
     required this.onSelect,
+    this.isWhite = true,
   });
   final CategoriesEnum? categoriesEnum;
   final bool isSelected;
   final bool isAllCategories;
   final Function(CategoriesEnum?) onSelect;
+  final bool isWhite;
   // final String? label;
   // final IconData? iconData;
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
+    print('--->${isWhite}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: ChoiceChip(
@@ -33,23 +35,35 @@ class CategoryCard extends StatelessWidget {
           children: [
             Icon(
               isAllCategories ? Icons.explore_outlined : categoriesEnum?.getIcon,
-              color: isSelected ? theme.cardColor : AppColors.lightBgColor,
+              color: isSelected
+                  ? isWhite
+                        ? theme.cardColor
+                        : AppColors.lightBgColor
+                  : isWhite
+                  ? AppColors.lightBgColor
+                  : theme.cardColor,
             ),
             Text(
               isAllCategories ? "All" : categoriesEnum?.title ?? "",
               style: AppTextStyles.styleS16W500(
-                color: isSelected ? theme.cardColor : AppColors.lightBgColor,
+                color: isSelected
+                    ? isWhite
+                          ? theme.cardColor
+                          : AppColors.lightBgColor
+                    : isWhite
+                    ? AppColors.lightBgColor
+                    : theme.cardColor,
               ),
             ),
           ],
         ),
         selected: isSelected,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: theme.shadowColor),
+          side: BorderSide(color: isWhite ? theme.shadowColor : theme.cardColor),
           borderRadius: BorderRadius.circular(46),
         ),
-        selectedColor: theme.shadowColor,
-        backgroundColor: theme.cardColor,
+        selectedColor: isWhite ? theme.shadowColor : theme.cardColor,
+        backgroundColor: isWhite ? theme.cardColor : theme.scaffoldBackgroundColor,
         showCheckmark: false,
       ),
     );

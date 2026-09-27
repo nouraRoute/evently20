@@ -8,13 +8,17 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     this.label,
     this.isPassword = false,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.validator,
     this.controller,
+    this.title,
+    this.maxLines = 1,
+    this.hintText,
   });
-  final String? label;
-  final String prefixIcon;
+  final String? label, title, hintText;
+  final String? prefixIcon;
   final bool isPassword;
+  final int maxLines;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   @override
@@ -27,50 +31,69 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        controller: widget.controller,
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
-        },
-        style: Theme.of(context).textTheme.labelMedium,
-        obscureText: passwordEnabled,
-        validator: widget.validator,
-        decoration: InputDecoration(
-          labelText: widget.label,
-          contentPadding: EdgeInsets.all(2),
-          labelStyle:
-              //  Theme.of(context).textTheme.labelMedium!.copyWith(
-              //   color: Theme.of(context).hoverColor,
-              //   fontSize: 16,
-              //   fontWeight: FontWeight.w500,
-              // ),
-              AppTextStyles.styleS16W500(color: Theme.of(context).hoverColor),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SvgPicture.asset(
-              widget.prefixIcon,
-              colorFilter: ColorFilter.mode(Theme.of(context).hoverColor, BlendMode.srcIn),
+      child: Column(
+        spacing: 5,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.title != null)
+            Text(
+              widget.title!,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16),
+            ),
+          TextFormField(
+            maxLines: widget.maxLines,
+            controller: widget.controller,
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
+            style: Theme.of(context).textTheme.labelMedium,
+            obscureText: passwordEnabled,
+            validator: widget.validator,
+            decoration: InputDecoration(
+              hintStyle: AppTextStyles.styleS16W500(color: Theme.of(context).hintColor),
+              hintText: widget.hintText,
+              labelText: widget.label,
+              contentPadding: EdgeInsets.all(2),
+              labelStyle:
+                  //  Theme.of(context).textTheme.labelMedium!.copyWith(
+                  //   color: Theme.of(context).hoverColor,
+                  //   fontSize: 16,
+                  //   fontWeight: FontWeight.w500,
+                  // ),
+                  AppTextStyles.styleS16W500(color: Theme.of(context).hoverColor),
+              prefixIcon: widget.prefixIcon != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SvgPicture.asset(
+                        widget.prefixIcon!,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).hoverColor,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    )
+                  : null,
+              suffixIcon: widget.isPassword
+                  ? InkWell(
+                      onTap: () {
+                        passwordEnabled = !passwordEnabled;
+                        setState(() {});
+                      },
+                      child: Icon(
+                        passwordEnabled ? Icons.visibility_off : Icons.remove_red_eye,
+                        color: Theme.of(context).hoverColor,
+                      ),
+                    )
+                  : null,
+              errorStyle: AppTextStyles.styleS14W400(color: AppColors.errorColor),
+              border: _buildBorder(),
+              enabledBorder: _buildBorder(),
+              focusedBorder: _buildBorder(),
+              errorBorder: _buildBorder(color: AppColors.errorColor),
+              focusedErrorBorder: _buildBorder(),
             ),
           ),
-          suffixIcon: widget.isPassword
-              ? InkWell(
-                  onTap: () {
-                    passwordEnabled = !passwordEnabled;
-                    setState(() {});
-                  },
-                  child: Icon(
-                    passwordEnabled ? Icons.visibility_off : Icons.remove_red_eye,
-                    color: Theme.of(context).hoverColor,
-                  ),
-                )
-              : null,
-          errorStyle: AppTextStyles.styleS14W400(color: AppColors.errorColor),
-          border: _buildBorder(),
-          enabledBorder: _buildBorder(),
-          focusedBorder: _buildBorder(),
-          errorBorder: _buildBorder(color: AppColors.errorColor),
-          focusedErrorBorder: _buildBorder(),
-        ),
+        ],
       ),
     );
   }
@@ -78,7 +101,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   InputBorder _buildBorder({Color? color}) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
-      borderSide: BorderSide(color: color ?? Theme.of(context).hintColor),
+      borderSide: BorderSide(color: color ?? Theme.of(context).dividerColor),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:evently/presentation/home/tabs/maps_tab/maps_tab.dart';
 import 'package:evently/presentation/home/tabs/profile_tab/profile_tab.dart';
 import 'package:evently/presentation/home/widgets/event_card.dart';
 import 'package:evently/presentation/home/widgets/home_header.dart';
+import 'package:evently/presentation/new_event/new_event_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,7 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
 
         backgroundColor: Theme.of(context).cardColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, NewEventScreen.routeName);
+        },
         shape: CircleBorder(side: BorderSide(color: Colors.white, width: 5)),
         child: Icon(Icons.add, color: Colors.white),
       ),
