@@ -1,6 +1,6 @@
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/enums/categories_enum.dart';
-import 'package:evently/theme/app_colors.dart';
+import 'package:evently/common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -22,7 +22,6 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    print('--->${isWhite}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: ChoiceChip(

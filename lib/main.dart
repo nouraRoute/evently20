@@ -3,7 +3,7 @@ import 'package:evently/presentation/auth/register/register_screen.dart';
 import 'package:evently/firebase_options.dart';
 import 'package:evently/presentation/home/home_screen.dart';
 import 'package:evently/presentation/new_event/new_event_screen.dart';
-import 'package:evently/theme/app_theme.dart';
+import 'package:evently/common/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

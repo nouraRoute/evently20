@@ -1,6 +1,11 @@
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/models/event_model.dart';
+import 'package:evently/presentation/home/tabs/home_tab/home_tab_provider/home_tab_provider.dart';
+import 'package:evently/services/events_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({super.key, required this.eventModel});
@@ -34,10 +39,10 @@ class EventCard extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "12\n",
+                    text: "${eventModel.dateValu.day}\n",
                     style: AppTextStyles.styleS20W700(color: Theme.of(context).colorScheme.primary),
                   ),
-                  TextSpan(text: "NOV"),
+                  TextSpan(text: DateFormat("MMM").format(eventModel.dateValu)),
                 ],
               ),
               style: AppTextStyles.styleS14W700(color: Theme.of(context).colorScheme.primary),
@@ -58,7 +63,19 @@ class EventCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 14),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (eventModel.isFav) {
+                      (eventModel.favorites ?? []).remove(FirebaseAuth.instance.currentUser?.uid);
+                    } else {
+                      eventModel.favorites = [
+                        ...(eventModel.favorites ?? []),
+                        FirebaseAuth.instance.currentUser?.uid ?? '',
+                      ];
+                    }
+
+                    Provider.of<EventsProvider>(context, listen: false).updateEvent(eventModel);
+                    await EventsService.updateFav(eventModel);
+                  },
                   icon: Icon(
                     eventModel.isFav ? Icons.favorite : Icons.favorite_border_outlined,
                     color: Theme.of(context).colorScheme.primary,

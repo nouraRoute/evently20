@@ -10,6 +10,18 @@ enum CategoriesEnum {
   final String title;
 
   const CategoriesEnum({required this.title});
+  String toJson() {
+    return title;
+  }
+
+  static CategoriesEnum fromJson(String jsonName) {
+    for (var i = 0; i < CategoriesEnum.values.length; i++) {
+      if (CategoriesEnum.values[i].title == jsonName) {
+        return CategoriesEnum.values[i];
+      }
+    }
+    return CategoriesEnum.birthDays;
+  }
 
   String get getImage {
     switch (this) {

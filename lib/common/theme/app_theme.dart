@@ -1,5 +1,5 @@
 import 'package:evently/common/app_text_styles.dart';
-import 'package:evently/theme/app_colors.dart';
+import 'package:evently/common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {

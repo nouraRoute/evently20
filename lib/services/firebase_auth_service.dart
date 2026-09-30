@@ -13,7 +13,6 @@ class FirebaseAuthService {
       );
 
       UserModel? userData = await _getUserInfo(credential.user!.uid);
-      log('--->>SUCCESS');
 
       return userData;
     } on FirebaseAuthException catch (e) {
@@ -33,7 +32,6 @@ class FirebaseAuthService {
       );
       user.id = credential.user?.uid;
       await _createUser(user);
-      log('--->>SUCCESS');
     } on FirebaseAuthException catch (e) {
       String errorMessage = _getFriendlyMessage(e.code);
       throw errorMessage;

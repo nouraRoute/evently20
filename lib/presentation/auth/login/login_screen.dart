@@ -6,7 +6,7 @@ import 'package:evently/gen/assets.gen.dart';
 import 'package:evently/models/user_model.dart';
 import 'package:evently/presentation/home/home_screen.dart';
 import 'package:evently/services/firebase_auth_service.dart';
-import 'package:evently/theme/app_colors.dart';
+import 'package:evently/common/theme/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 

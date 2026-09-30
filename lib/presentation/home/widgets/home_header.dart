@@ -1,7 +1,7 @@
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/enums/categories_enum.dart';
 import 'package:evently/presentation/home/widgets/category_card.dart';
-import 'package:evently/theme/app_colors.dart';
+import 'package:evently/common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatefulWidget implements PreferredSizeWidget {
