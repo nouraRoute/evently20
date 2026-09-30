@@ -1,3 +1,5 @@
+import 'package:evently/app_provider/app_provider.dart';
+import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/presentation/auth/login/login_screen.dart';
 import 'package:evently/presentation/auth/register/register_screen.dart';
 import 'package:evently/firebase_options.dart';
@@ -7,6 +9,8 @@ import 'package:evently/common/theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,18 +30,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
-      routes: {
-        LoginScreen.routeName: (_) => LoginScreen(),
-        RegisterScreen.routeName: (_) => RegisterScreen(),
-        HomeScreen.routeName: (_) => HomeScreen(),
-        NewEventScreen.routeName: (_) => NewEventScreen(),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) {
+        return AppProvider();
       },
-      initialRoute: isLoggedIn() ? HomeScreen.routeName : LoginScreen.routeName,
+      child: Builder(
+        builder: (ctx) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: ctx.watch<AppProvider>().themeMode,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
+            ],
+            locale: Locale(ctx.watch<AppProvider>().local),
+            supportedLocales: AppLocalizations.supportedLocales,
+            routes: {
+              LoginScreen.routeName: (_) => LoginScreen(),
+              RegisterScreen.routeName: (_) => RegisterScreen(),
+              HomeScreen.routeName: (_) => HomeScreen(),
+              NewEventScreen.routeName: (_) => NewEventScreen(),
+            },
+            initialRoute: isLoggedIn() ? HomeScreen.routeName : LoginScreen.routeName,
+          );
+        },
+      ),
     );
   }
 }

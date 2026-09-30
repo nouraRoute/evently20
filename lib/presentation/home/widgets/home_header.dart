@@ -1,8 +1,11 @@
+import 'package:evently/app_provider/app_provider.dart';
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/enums/categories_enum.dart';
+import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/presentation/home/widgets/category_card.dart';
 import 'package:evently/common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeHeader extends StatefulWidget implements PreferredSizeWidget {
   const HomeHeader({super.key});
@@ -38,7 +41,7 @@ class _HomeHeaderState extends State<HomeHeader> {
 
                   children: [
                     Text(
-                      "Welcome Back ✨",
+                      AppLocalizations.of(context)!.welcome_back,
                       style: theme.textTheme.labelSmall!.copyWith(color: AppColors.lightBgColor),
                     ),
                     Text(
@@ -68,8 +71,16 @@ class _HomeHeaderState extends State<HomeHeader> {
                   width: 35,
                   height: 35,
                   child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.wb_sunny_outlined, color: AppColors.lightBgColor),
+                    onPressed: () {
+                      context.read<AppProvider>().changeTheme();
+                    },
+                    icon: Icon(
+                      // Theme.of(context).colorScheme.brightness == Brightness.light
+                      context.watch<AppProvider>().themeMode == ThemeMode.light
+                          ? Icons.nightlight_outlined
+                          : Icons.wb_sunny_outlined,
+                      color: AppColors.lightBgColor,
+                    ),
                   ),
                 ),
                 SizedBox(width: 5),
@@ -77,14 +88,16 @@ class _HomeHeaderState extends State<HomeHeader> {
                   width: 35,
                   height: 35,
                   child: FilledButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<AppProvider>().changeLocal();
+                    },
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.lightBgColor,
                       padding: EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Text(
-                      "EN",
+                      context.watch<AppProvider>().local,
                       style: AppTextStyles.styleS14W700(color: AppColors.mainColors),
                     ),
                   ),

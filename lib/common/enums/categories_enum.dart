@@ -1,4 +1,5 @@
 import 'package:evently/gen/assets.gen.dart';
+import 'package:evently/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 enum CategoriesEnum {
@@ -12,6 +13,21 @@ enum CategoriesEnum {
   const CategoriesEnum({required this.title});
   String toJson() {
     return title;
+  }
+
+  String getTitle(context) {
+    switch (this) {
+      case CategoriesEnum.birthDays:
+        return AppLocalizations.of(context)!.birthDay;
+      case CategoriesEnum.books:
+        return AppLocalizations.of(context)!.book;
+
+      case CategoriesEnum.sports:
+        return AppLocalizations.of(context)!.sports;
+
+      case CategoriesEnum.gaming:
+        return AppLocalizations.of(context)!.gaming;
+    }
   }
 
   static CategoriesEnum fromJson(String jsonName) {

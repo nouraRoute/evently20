@@ -1,6 +1,7 @@
 import 'package:evently/common/app_text_styles.dart';
 import 'package:evently/common/enums/categories_enum.dart';
 import 'package:evently/common/theme/app_colors.dart';
+import 'package:evently/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -43,7 +44,9 @@ class CategoryCard extends StatelessWidget {
                   : theme.cardColor,
             ),
             Text(
-              isAllCategories ? "All" : categoriesEnum?.title ?? "",
+              isAllCategories
+                  ? AppLocalizations.of(context)!.all
+                  : categoriesEnum?.getTitle(context) ?? "",
               style: AppTextStyles.styleS16W500(
                 color: isSelected
                     ? isWhite
